@@ -1,0 +1,11 @@
+.app-root {
+  width: 100%;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .app-root {
+    transition: background 0.3s ease-in-out;
+  }
+}
