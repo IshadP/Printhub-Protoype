@@ -1,6 +1,6 @@
 import React from 'react';
 
-export type TabId = 'files' | 'orders';
+export type TabId = 'files' | 'orders' | null;
 
 interface NavBarProps {
   activeTab: TabId;
@@ -9,7 +9,7 @@ interface NavBarProps {
 
 export default function NavBar({ activeTab, onTabChange }: NavBarProps) {
   return (
-    <div className="w-full bg-surface border-t border-outline-variant pb-2">
+    <div className="w-full bg-surface border-t border-outline-variant pb-2 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
       <div className="flex w-full">
         <NavButton 
           isActive={activeTab === 'files'} 
@@ -26,9 +26,9 @@ export default function NavBar({ activeTab, onTabChange }: NavBarProps) {
         />
       </div>
 
-      {/* Home Indicator (The black bar at the bottom) */}
+      {/* Home Indicator */}
       <div className="w-full flex justify-center pb-2 mt-2">
-        <div className="w-[108px] h-1 bg-[#1e1e1e] rounded-full opacity-80"></div>
+        <div className="w-[108px] h-1 bg-[#1e1e1e] rounded-full opacity-80 dark:bg-white/20"></div>
       </div>
     </div>
   );
@@ -46,18 +46,16 @@ function NavButton({ isActive, onClick, label, icon }: NavButtonProps) {
     <button 
       onClick={onClick}
       className="flex-1 flex flex-col justify-center items-center gap-1 pt-3 pb-4 cursor-pointer transition-colors duration-200"
-      style={{
-        flex: '1 0 0', // From your instructions
-      }}
+      style={{ flex: '1 0 0' }}
     >
-      {/* Icon Container (The Pill) */}
+      {/* Icon Container (Pill) */}
       <div className={`
         flex items-center justify-center h-8 w-16 rounded-full transition-colors duration-300
         ${isActive ? 'bg-primary' : 'bg-transparent'}
       `}>
         <span className={`
-          text-[24px] transition-colors duration-200
-          ${isActive ? 'text-on-primary-container material-icons' : 'text-on-surface-variant material-icons-outlined'}
+          text-[24px] transition-colors duration-200 material-icons-round
+          ${isActive ? 'text-on-primary-container' : 'text-on-surface-variant'}
         `}>
           {icon}
         </span>
@@ -65,8 +63,8 @@ function NavButton({ isActive, onClick, label, icon }: NavButtonProps) {
 
       {/* Label */}
       <span className={`
-        font-material-themelabellarge transition-colors duration-200
-        ${isActive ? 'text-on-primary-container font-bold' : 'text-on-surface-variant'}
+        font-material-themelabelmedium transition-colors duration-200
+        ${isActive ? 'text-on-primary-container font-bold' : 'text-on-surface-variant font-medium'}
       `}>
         {label}
       </span>
