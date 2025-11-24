@@ -11,7 +11,7 @@ interface OrientationToggleProps {
   className?: string;
 }
 
-export default function OrientationToggle({ 
+export default function OrientationIcon({ 
   orientation, 
   onChange, 
   className = "" 
