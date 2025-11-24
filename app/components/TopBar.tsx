@@ -1,25 +1,26 @@
+"use client";
+
 import React from 'react';
 import Icon from './Icon';
+import { View } from '../types/MobileLayoutProps';
 
 interface TopBarProps {
   title: string;
   isDarkMode: boolean;
   onToggleTheme: () => void;
-  onBack?: () => void;
-  showBackButton?: boolean;
+  onBack: () => void;
+  showBackButton: boolean;
 }
 
-
 const StatusBar: React.FC = () => (
-  <div className="flex pt-2 pb-2 px-4 justify-between items-end self-stretch bg-color-surface-container-low text-color-on-surface-variant ">
-    
+  // Use surface-container-low for status bar background
+  <div className="flex pt-2 pb-1 px-4 justify-between items-center w-full bg-color-surface-container-low text-color-on-surface-variant font-material-themelabelmedium h-8">
     <span className="font-material-themelabellarge">9:30</span>
     
-   
     <div className="flex items-center gap-1.5">
-    
-      <Icon name="signal_cellular_alt" size={24} />
-      <Icon name="battery_full" size={24} className="rotate-90" />
+      {/* Placeholder icons for connectivity/battery */}
+      <Icon name="signal_cellular_alt" size={20} />
+      <Icon name="battery_full" size={20} className="rotate-90" />
     </div>
   </div>
 );
@@ -32,31 +33,54 @@ const TopBar: React.FC<TopBarProps> = ({
   showBackButton
 }) => {
   return (
-    <header className="sticky top-0 z-10 w-full shadow-sm bg-primary-container transition-colors duration-300 pt-4">
+    <header className="sticky top-0 z-20 w-full shadow-sm bg-color-surface-container-low transition-colors duration-300">
       <StatusBar />
-      <div className="flex h-16 items-center justify-between p-2">
-
-        <h1 className="text-on-primary-container font-material-themetitlelarge">
-          PrintHub
-        </h1>
+      <div className="flex h-16 items-center px-4 justify-between">
         
+        {/* Left Side: Back Button or App Title */}
         <div className="flex items-center gap-2">
+            {showBackButton ? (
+                <button 
+                    onClick={onBack}
+                    className="p-2 rounded-full text-color-on-surface hover:bg-color-surface-container transition-colors cursor-pointer"
+                    aria-label="Back"
+                >
+                    <Icon name="arrow_back" size={24} />
+                </button>
+            ) : (
+                // App Logo/Title on Home View
+                <h1 className="text-color-primary font-material-themetitlelarge">
+                    Printhub
+                </h1>
+            )}
 
+            {/* Dynamic Title (Shown when navigating to a specific view) */}
+            {showBackButton && (
+                <span className="text-color-on-surface font-material-themetitlelarge truncate max-w-[200px]">
+                    {title}
+                </span>
+            )}
+
+        </div>
+        
+        {/* Right Side: Actions */}
+        <div className="flex items-center gap-1">
+          {/* Dark Mode Toggle */}
           <button 
             onClick={onToggleTheme}
-            className="flex items-center justify-center p-2 rounded-full text-on-primary-container hover:bg-color-primary-container transition-colors cursor-pointer"
-            aria-label="Toggle Dark Mode"
+            className="p-2 rounded-full text-color-on-surface-variant hover:bg-color-surface-container transition-colors cursor-pointer"
+            aria-label="Toggle Theme"
           >
-  
             <Icon 
-              name={isDarkMode ? 'light_mode' : 'light_mode'} 
+              name={isDarkMode ? 'dark_mode' : 'light_mode'} 
               size={24} 
-              filled={true} 
+              filled={isDarkMode} 
             />
           </button>
           
+          {/* User Profile */}
           <button 
-            className="flex items-center justify-center p-2 rounded-full text-on-primary-container hover:bg-color-surface-container-high transition-colors cursor-pointer"
+            className="p-2 rounded-full text-color-on-surface-variant hover:bg-color-surface-container transition-colors cursor-pointer"
             aria-label="User Profile"
           >
             <Icon name="account_circle" size={24} />

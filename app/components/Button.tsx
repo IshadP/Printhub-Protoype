@@ -10,23 +10,23 @@ export default function Button({ label, icon, className = "", ...props }: Button
   return (
     <button
       className={`
-        group
         flex items-center justify-center gap-2 
-        bg-primary text-on-primary 
+        min-h-14 
         rounded-full 
-        pl-4 pr-4 py-2
-        min-h-14
-        font-material-themelabellarge text-lg font-bold tracking-wide
+        px-6 py-2 
+        bg-color-primary text-color-on-primary 
+        font-material-themelabellarge font-medium
         shadow-md
-        cursor-pointer
+        transition-colors duration-200
+        hover:bg-color-primary-container hover:text-color-on-primary-container
+        active:shadow-lg
+        disabled:bg-color-surface-container-high disabled:text-color-on-surface-variant disabled:shadow-none
         ${className}
       `}
       {...props}
     >
       {icon && (
-        <div className="flex items-center justify-center rounded-full text-on-primary">
-           <Icon name={icon} size={32} className="font-themelabellarg" />
-        </div>
+        <Icon name={icon} size={24} className="text-current" />
       )}
       <span>{label}</span>
     </button>

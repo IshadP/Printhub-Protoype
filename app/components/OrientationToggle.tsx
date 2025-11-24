@@ -1,51 +1,57 @@
 "use client";
 
 import React from "react";
+import Icon from "./Icon";
 
-type Orientation = "portrait" | "landscape";
+export type OrientationMode = "portrait" | "landscape";
 
-interface OrientationToggleButtonProps {
-  orientation: Orientation;
-  onChange: (orientation: Orientation) => void;
+interface OrientationToggleProps {
+  value: OrientationMode;
+  onChange: (value: OrientationMode) => void;
   className?: string;
 }
 
+// Helper function to define shared styling logic
+const getOrientationClasses = (isActive: boolean) => {
+  const base = "flex-1 flex flex-col items-center justify-center px-4 py-3 text-sm transition-colors duration-300 ease-in-out border";
+  
+  return isActive
+    ? `${base} bg-color-primary text-color-on-primary border-color-primary font-material-themelabellarge`
+    : `${base} bg-color-surface-container text-color-on-surface-variant border-color-outline hover:bg-color-surface-container-high font-material-themelabelmedium`;
+};
+
+
 export default function OrientationToggle({
-  orientation,
+  value,
   onChange,
   className = "",
-}: OrientationToggleButtonProps) {
-  const isPortrait = orientation === "portrait";
+}: OrientationToggleProps) {
+  
+  const isPortrait = value === "portrait";
 
   return (
-    <div className={`flex rounded-full w-full overflow-hidden font-medium ${className}`}>
+    // Outer div has rounded corners and simulated border/outline
+    <div className={`flex w-full overflow-hidden font-medium rounded-2xl shadow-inner ${className}`}>
+      {/* Option: Portrait */}
       <button
         type="button"
         onClick={() => onChange("portrait")}
-        className={`
-          flex-1 px-6 py-3 text-sm rounded-lg transition-colors duration-300 ease-in-out
-          ${
-            isPortrait
-              ? "bg-primary text-on-primary"
-              : "bg-secondary text-on-secondary"
-          }
-        `}
+        className={`${getOrientationClasses(isPortrait)} rounded-l-2xl border-r-0`}
+        aria-pressed={isPortrait}
       >
-        Portrait
+        <Icon name="crop_portrait" size={24} className="text-current" filled={isPortrait} />
+        <span>Portrait</span>
       </button>
+
+      {/* Option: Landscape */}
       <button
         type="button"
         onClick={() => onChange("landscape")}
-        className={`
-          flex-1 px-6 py-3 text-sm rounded-full transition-colors duration-300 ease-in-out
-          ${
-            !isPortrait
-              ? "bg-primary text-on-primary"
-              : "bg-secondary text-on-secondary"
-          }
-        `}
+        className={`${getOrientationClasses(!isPortrait)} rounded-r-2xl border-l-0`}
+        aria-pressed={!isPortrait}
       >
-        Landscape
+        <Icon name="crop_landscape" size={24} className="text-current" filled={!isPortrait} />
+        <span>Landscape</span>
       </button>
     </div>
   );
