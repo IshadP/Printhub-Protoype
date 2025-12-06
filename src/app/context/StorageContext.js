@@ -14,7 +14,7 @@ export function StorageProvider({ children }) {
   useEffect(() => {
     const storedFiles = sessionStorage.getItem('ph_files');
     const storedOrders = sessionStorage.getItem('ph_orders');
-    
+
     if (storedFiles) setFiles(JSON.parse(storedFiles));
     if (storedOrders) setOrders(JSON.parse(storedOrders));
   }, []);
@@ -37,7 +37,7 @@ export function StorageProvider({ children }) {
   };
 
   const updateFileConfig = (fileId, newConfig) => {
-    setFiles(prev => prev.map(f => 
+    setFiles(prev => prev.map(f =>
       f.id === fileId ? { ...f, config: { ...f.config, ...newConfig } } : f
     ));
   };

@@ -33,8 +33,8 @@ const BottomSheet = ({ isOpen, onClose, file, onSave }) => {
     const SegmentButton = ({ active, onClick, label, icon, imageSrc }) => (
         <button
             onClick={onClick}
-            className={`flex-1 py-2 rounded-lg text-sm font-medium flex items-center justify-center gap-2 transition-colors
-                ${active ? 'bg-green-7 text-white' : 'bg-green-1 text-green-10 hover:bg-green-2'}
+            className={`flex-1 py-2  text-sm font-medium flex items-center justify-center gap-2 transition-colors
+                ${active ? 'bg-primary text-on-primary rounded-full' : 'bg-secondary text-on-secondary hover:bg-green-2 rounded-lg'}
             `}
         >
             {imageSrc ? (
@@ -97,21 +97,21 @@ const BottomSheet = ({ isOpen, onClose, file, onSave }) => {
                     <span className="font-material-bodylarge text-on-surface font-medium">Color Print</span>
                     <button
                         onClick={() => setConfig(prev => ({ ...prev, color: !prev.color }))}
-                        className={`w-12 h-7 rounded-full relative transition-colors ${config.color ? 'bg-on-surface' : 'bg-outline'}`}
+                        className={`w-12 h-7 rounded-full relative transition-colors ${config.color ? 'bg-primary' : 'border-outline border'}`}
                     >
-                        <div className={`absolute top-1 w-5 h-5 rounded-full bg-surface-bright shadow-sm transition-all flex items-center justify-center
-                            ${config.color ? 'left-6' : 'left-1'}
+                        <div className={`absolute top-1 w-5 h-5 rounded-full shadow-sm transition-all flex items-center justify-center 
+                            ${config.color ? 'left-6 bg-on-primary text-surface-bright' : 'left-1 bg-outline  '}
                         `}>
                             {/* Mocking the 'x' or check icon inside toggle */}
-                            <Icon name={config.color ? "check" : "close"} size={14} className="text-on-surface" />
+                            <Icon name={config.color ? "check" : "close"} size={14} className={`text-${config.color ? 'primary' : 'surface-bright'}`} />
                         </div>
                     </button>
                 </div>
 
                 {/* Double Side */}
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-1">
                     <span className="font-material-bodylarge text-on-surface font-medium">Double Side</span>
-                    <div className="flex gap-2">
+                    <div className="flex gap-1 rounded-full overflow-hidden">
                         <SegmentButton
                             active={config.doubleSide === 'off'}
                             onClick={() => setConfig(prev => ({ ...prev, doubleSide: 'off' }))}
@@ -152,7 +152,7 @@ const BottomSheet = ({ isOpen, onClose, file, onSave }) => {
                 />
 
                 {/* Orientation */}
-                <div className="flex gap-2 mt-2">
+                <div className="flex gap-1 mt-2 rounded-full overflow-hidden">
                     <SegmentButton
                         active={config.orientation === 'portrait'}
                         onClick={() => setConfig(prev => ({ ...prev, orientation: 'portrait' }))}
@@ -166,16 +166,16 @@ const BottomSheet = ({ isOpen, onClose, file, onSave }) => {
                 </div>
 
                 {/* Actions */}
-                <div className="flex gap-4 justify-end mt-4">
+                <div className="flex gap-2 justify-end mt-4">
                     <button
                         onClick={onClose}
-                        className="px-6 py-2 rounded-full border border-outline text-on-surface font-medium hover:bg-surface-container"
+                        className="px-4 py-2 rounded-full border border-outline text-on-surface font-medium hover:bg-surface-container"
                     >
                         Cancel
                     </button>
                     <button
                         onClick={handleSave}
-                        className="px-6 py-2 rounded-full bg-green-7 text-white font-medium hover:bg-green-8"
+                        className="px-6 py-2 rounded-full bg-primary text-on-primary font-material-labellarge "
                     >
                         Apply
                     </button>

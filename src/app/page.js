@@ -19,12 +19,32 @@ export default function Home() {
     toggleSelection,
     enterSelectionMode,
     exitSelectionMode,
-    updateFileConfig
+    updateFileConfig,
+    addFiles
   } = useStorage();
 
   const [editingFileId, setEditingFileId] = useState(null);
 
-  const handleQuickPrint = () => {
+  const handleQuickPrint = (type) => {
+    const newFile = {
+      id: `quick-${Date.now()}`,
+      name: type === 'admission' ? 'Admission Form.pdf' : 'Admit Card Form.pdf',
+      type: 'application/pdf',
+      size: 1024 * 1024, // 1MB dummy size
+      pages: 2,
+      date: new Date().toISOString(),
+      config: {
+        copies: 1,
+        color: false,
+        pages: 'all',
+        doubleSide: 'off',
+        orientation: 'portrait'
+      }
+    };
+    addFiles([newFile]);
+  };
+
+  const handleUpload = () => {
     router.push('/upload');
   };
 
@@ -44,30 +64,96 @@ export default function Home() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-surface-dim">
-      <div className="aspect-270/600 border-2 h-[90vh] rounded-3xl overflow-hidden relative flex flex-col bg-surface-bright shadow-2xl">
+      <div className="aspect-270/600 border-2 h-[90vh] rounded-3xl overflow-hidden relative flex flex-col justify-start top-0 bg-primary-container shadow-2xl">
         <TopBar
           title={isSelectionMode ? `${cart.length} Selected` : "Printhub"}
           showBackButton={isSelectionMode}
           onBack={exitSelectionMode}
         />
 
-        <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-4">
+        <div className="flex-1 overflow-y-auto px-4 flex flex-col gap-4">
           {files.length === 0 ? (
-            <div className="flex flex-col gap-6 mt-10">
-              <QuickPrintCard onClick={handleQuickPrint} />
-              <div className="text-center text-on-surface-variant font-material-bodylarge">
+            <div className="flex flex-col gap-6 mt-4">
+              <div className="flex flex-col gap-4">
+                <h2 className="font-material-titlemedium text-on-surface">Quick Print</h2>
+                <div className="grid grid-rows-1 grid-flow-col gap-2 overflow-x-auto pb-4">
+                  <div className="flex gap-1 h-full flex-col border-outline rounded-3xl overflow-hidden w-[22rem]">
+                    <div className="w-full ">
+                      <QuickPrintCard
+                        title="Admission Form"
+                        onClick={() => handleQuickPrint('admission')}
+                      />
+                    </div>
+                    <div className="w-full">
+                      <QuickPrintCard
+                        title="Admit Card Form"
+                        onClick={() => handleQuickPrint('admit')}
+                      />
+                    </div>
+                  </div>
+                  {/* Add more items here to test bleeding */}
+                  <div className="flex gap-1 h-full flex-col border-outline rounded-3xl overflow-hidden w-[22rem]">
+                    <div className="w-full">
+                      <QuickPrintCard
+                        title="Exam Schedule"
+                        onClick={() => handleQuickPrint('exam')}
+                      />
+                    </div>
+                    <div className="w-full">
+                      <QuickPrintCard
+                        title="Result Sheet"
+                        onClick={() => handleQuickPrint('result')}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="text-center text-on-surface-variant font-material-bodylarge mt-4">
                 No files in inventory
               </div>
             </div>
           ) : (
             <>
+              <div className="flex flex-col gap-6 mt-4">
+                <div className="flex flex-col gap-4">
+                  <h2 className="font-material-titlemedium text-on-surface">Quick Print</h2>
+                  <div className="grid grid-rows-1 grid-flow-col gap-2 overflow-x-auto pb-4">
+                    <div className="flex gap-1 h-full flex-col border-outline rounded-3xl overflow-hidden w-[22rem]">
+                      <div className="w-full ">
+                        <QuickPrintCard
+                          title="Admission Form"
+                          onClick={() => handleQuickPrint('admission')}
+                        />
+                      </div>
+                      <div className="w-full">
+                        <QuickPrintCard
+                          title="Admit Card Form"
+                          onClick={() => handleQuickPrint('admit')}
+                        />
+                      </div>
+                    </div>
+                    {/* Add more items here to test bleeding */}
+                    <div className="flex gap-1 h-full flex-col border-outline rounded-3xl overflow-hidden w-[22rem] ">
+                      <div className="w-full">
+                        <QuickPrintCard
+                          title="Exam Schedule"
+                          onClick={() => handleQuickPrint('exam')}
+                        />
+                      </div>
+                      <div className="w-full">
+                        <QuickPrintCard
+                          title="Result Sheet"
+                          onClick={() => handleQuickPrint('result')}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <div className="flex justify-between items-center mb-2">
                 <h2 className="font-material-titlemedium text-on-surface">My Files</h2>
-                <button onClick={handleQuickPrint} className="text-primary font-material-labelmedium">
-                  + Add File
-                </button>
               </div>
-              <div className="flex flex-col gap-2 pb-20">
+              <div className="flex flex-col gap-1 rounded-3xl overflow-hidden">
                 {files.map(file => (
                   <ItemCard
                     key={file.id}
