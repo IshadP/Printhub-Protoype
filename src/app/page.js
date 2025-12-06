@@ -6,8 +6,8 @@ import Navbar from "./components/navbar";
 import TopBar from "./components/topbar";
 import QuickPrintCard from "./components/QuickPrintCard";
 import ItemCard from "./components/ItemCard";
-import Button from "./components/Button";
 import BottomSheet from "./components/BottomSheet";
+import ActionButtons from "./components/ActionButtons";
 import { useStorage } from "./context/StorageContext";
 
 export default function Home() {
@@ -170,18 +170,8 @@ export default function Home() {
           )}
         </div>
 
-        {/* Floating Action Button for Print */}
-        {isSelectionMode && cart.length > 0 && (
-          <div className="absolute bottom-24 left-0 right-0 px-4 flex justify-center z-10">
-            <Button
-              className="shadow-lg"
-              icon="print"
-              onClick={handlePrintSelected}
-            >
-              Print ({cart.length})
-            </Button>
-          </div>
-        )}
+        {/* Floating Action Buttons */}
+
 
         <BottomSheet
           isOpen={!!editingFileId}
@@ -189,7 +179,13 @@ export default function Home() {
           file={editingFile}
           onSave={handleSaveConfig}
         />
-
+        <div className="flex justify-center pointer-events-none py-4 w-full">
+          <ActionButtons
+            onAdd={handleUpload}
+            onPrint={handlePrintSelected}
+            selectedCount={cart.length}
+          />
+        </div>
         <Navbar />
       </div>
     </div>
