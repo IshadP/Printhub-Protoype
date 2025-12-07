@@ -20,7 +20,8 @@ export default function Home() {
     enterSelectionMode,
     exitSelectionMode,
     updateFileConfig,
-    addFiles
+    addFiles,
+    removeFile
   } = useStorage();
 
   const [editingFileId, setEditingFileId] = useState(null);
@@ -44,9 +45,7 @@ export default function Home() {
     addFiles([newFile]);
   };
 
-  const handleUpload = () => {
-    router.push('/upload');
-  };
+
 
   const handlePrintSelected = () => {
     router.push('/scan');
@@ -167,6 +166,7 @@ export default function Home() {
                       onSelect={toggleSelection}
                       onLongPress={enterSelectionMode}
                       onEdit={handleEdit}
+                      onDelete={removeFile}
                     />
                   ))}
                 </div>
@@ -186,9 +186,10 @@ export default function Home() {
         />
         <div className="flex justify-center pointer-events-none py-4 w-full">
           <ActionButtons
-            onAdd={handleUpload}
+            addHref="/upload"
             onPrint={handlePrintSelected}
             selectedCount={cart.length}
+            printDisabled={files.length === 0}
           />
         </div>
         <Navbar />

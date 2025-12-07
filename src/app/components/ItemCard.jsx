@@ -70,18 +70,56 @@ const ItemCard = ({
         setIsSwiping(false);
     };
 
+    // Mouse Event Wrappers
+    const onMouseDown = (e) => {
+        longPressProps.onMouseDown(e);
+        setTouchEnd(null);
+        setTouchStart(e.clientX);
+        setIsSwiping(true);
+    };
+
+    const onMouseMove = (e) => {
+        if (!isSwiping || !touchStart) return;
+        setTouchEnd(e.clientX);
+        const currentOffset = e.clientX - touchStart;
+        if (currentOffset < 0) { // Only allow left swipe
+            setOffset(currentOffset);
+            // Cancel long press if drag starts (threshold 5px)
+            if (Math.abs(currentOffset) > 5) {
+                longPressProps.onMouseLeave(e);
+            }
+        }
+    };
+
+    const onMouseUp = (e) => {
+        longPressProps.onMouseUp(e);
+        onTouchEnd();
+    };
+
+    const onMouseLeave = (e) => {
+        longPressProps.onMouseLeave(e);
+        if (isSwiping) onTouchEnd();
+    };
+
+
     if (isDeleting) return null;
 
     return (
         <div className="relative overflow-hidden rounded-lg">
             {/* Background Layer (Delete) */}
             <div className="absolute inset-0 bg-red-500 flex items-center justify-end px-6 rounded-[4px]">
-                <Icon name="delete" size={24} className="text-white" />1
+                <Icon name="delete" size={24} className="text-white" />
             </div>
 
             {/* Foreground Layer (Card) */}
             <div
                 {...longPressProps}
+                // Override mouse events with our composition
+                onMouseDown={onMouseDown}
+                onMouseMove={onMouseMove}
+                onMouseUp={onMouseUp}
+                onMouseLeave={onMouseLeave}
+
                 onTouchStart={onTouchStart}
                 onTouchMove={onTouchMove}
                 onTouchEnd={onTouchEnd}

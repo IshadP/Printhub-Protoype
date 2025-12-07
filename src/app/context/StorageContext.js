@@ -42,6 +42,19 @@ export function StorageProvider({ children }) {
     ));
   };
 
+  const removeFile = (fileId) => {
+    setFiles(prev => prev.filter(f => f.id !== fileId));
+    setCart(prev => prev.filter(id => id !== fileId));
+    // If we removed the last selected item, exit selection mode
+    setCart(prev => {
+      const newCart = prev.filter(id => id !== fileId);
+      if (prev.length > 0 && newCart.length === 0) {
+        setIsSelectionMode(false);
+      }
+      return newCart;
+    });
+  };
+
   const toggleSelection = (fileId) => {
     setCart(prev => {
       if (prev.includes(fileId)) {
@@ -97,6 +110,7 @@ export function StorageProvider({ children }) {
       isSelectionMode,
       addFiles,
       updateFileConfig,
+      removeFile,
       toggleSelection,
       enterSelectionMode,
       exitSelectionMode,

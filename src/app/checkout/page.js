@@ -10,19 +10,20 @@ import Icon from "../components/Icon";
 import { useStorage } from "../context/StorageContext";
 
 const PrinterInfoCard = () => (
-    <div className="bg-surface-container-low p-4 rounded-xl flex items-center justify-between mb-4">
+    <div className="bg-surface-bright p-2 rounded-2xl flex flex-col gap-4 p-4 items-center justify-start mb-4">
         <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container">
-                <Icon name="print" size={24} />
-            </div>
             <div>
+                <p>Selected Printer</p>
                 <h3 className="font-material-titlemedium text-on-surface">Printer A1</h3>
-                <p className="font-material-bodysmall text-green-7 flex items-center gap-1">
-                    <span className="w-2 h-2 rounded-full bg-green-7" /> Online
-                </p>
+
             </div>
         </div>
-        <button className="text-primary font-material-labelmedium">Change</button>
+        <div className='flex items-center justify-between w-full'>
+            <p className="font-material-titlesmall text-on-primary-container bg-primary-container rounded-full px-4 py-2 flex justify-center items-center gap-1">
+                Online
+            </p>
+            <button className="bg-primary rounded-lg p-2 font-material-labellarge text-on-primary">Change Printer</button>
+        </div>
     </div>
 );
 
@@ -32,10 +33,6 @@ const PaymentCard = ({ total }) => (
             <span className="font-material-bodylarge text-on-surface">Total Amount</span>
             <span className="font-material-titlelarge text-on-surface">₹{total}</span>
         </div>
-        <div className="flex items-center gap-2 text-on-surface-variant font-material-bodysmall">
-            <Icon name="credit_card" size={16} />
-            <span>Paying with UPI</span>
-        </div>
     </div>
 );
 
@@ -44,7 +41,7 @@ export default function CheckoutPage() {
     const { files, cart, updateFileConfig, createOrder } = useStorage();
     const [editingFileId, setEditingFileId] = useState(null);
 
-    const selectedFiles = files.filter(f => cart.includes(f.id));
+    const selectedFiles = cart.length > 0 ? files.filter(f => cart.includes(f.id)) : files;
 
     // Mock total calculation
     const total = selectedFiles.reduce((acc, file) => acc + (file.config.copies * 10), 0);
@@ -58,12 +55,8 @@ export default function CheckoutPage() {
 
     return (
         <div className="flex min-h-screen items-center justify-center bg-surface-dim">
-            <div className="aspect-270/600 border-2 h-[90vh] rounded-3xl overflow-hidden relative flex flex-col bg-surface-bright shadow-2xl">
-                <TopBar
-                    title="Checkout"
-                    showBackButton={true}
-                    onBack={() => router.back()}
-                />
+            <div className="aspect-270/600 border-2 h-[90vh] rounded-3xl overflow-hidden relative flex flex-col bg-primary-container shadow-2xl">
+                <TopBar />
 
                 <div className="flex-1 overflow-y-auto p-4 flex flex-col">
                     <PrinterInfoCard />

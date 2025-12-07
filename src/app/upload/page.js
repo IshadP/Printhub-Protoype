@@ -72,7 +72,8 @@ export default function UploadPage() {
     const editingFile = stagedFiles.find(f => f.id === editingFileId);
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-surface-dim">
+        <div className="flex min-h-screen items-center justify-center bg-surface-dim gap-12">
+            {/* Phone Frame */}
             <div className="aspect-270/600 border-2 h-[90vh] rounded-3xl overflow-hidden relative flex flex-col justify-start top-0 bg-primary-container shadow-2xl">
                 <TopBar
                     title="Printhub"
@@ -127,6 +128,21 @@ export default function UploadPage() {
                 </div>
 
                 <Navbar />
+            </div>
+
+            {/* Simulation Controls */}
+            <div className="flex flex-col gap-4">
+                <div className="bg-white p-6 rounded-2xl shadow-lg flex flex-col gap-4 max-w-xs">
+                    <h3 className="font-bold text-lg text-gray-800">Simulation Controls</h3>
+                    <p className="text-sm text-gray-600">Simulate adding files from the operating system or other apps.</p>
+                    <button
+                        onClick={() => setStagedFiles(prev => [...prev, ...generateMockFiles(1)])}
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-4 rounded-xl flex items-center gap-3 font-semibold shadow-md transition-all active:scale-95"
+                    >
+                        <Icon name="add" size={24} className="text-white" />
+                        Simulate OS selection
+                    </button>
+                </div>
             </div>
         </div>
     );
