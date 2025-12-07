@@ -11,7 +11,7 @@ export default function OrdersPage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-surface-dim">
-      <div className="aspect-270/600 border-2 h-[90vh] rounded-3xl overflow-hidden relative flex flex-col bg-surface-bright shadow-2xl">
+      <div className="aspect-270/600 border-2 h-[90vh] rounded-3xl overflow-hidden relative flex flex-col bg-primary-container shadow-2xl">
         <TopBar title="My Orders" showBackButton={false} />
 
         <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-2">
@@ -22,9 +22,20 @@ export default function OrdersPage() {
               <p>No orders yet</p>
             </div>
           ) : (
-            orders.map(order => (
-              <OrderListItem key={order.id} order={order} />
-            ))
+            <div className="rounded-2xl overflow-hidden flex flex-col gap-1">
+              {orders.map(order => (
+                order.items && order.items.map((item, index) => (
+                  <OrderListItem
+                    key={`${order.id}-${index}`}
+                    id={order.id}
+                    name={item.name}
+                    price={item.config.copies * 10} // Mock price calculation
+                    date={new Date(order.date).toLocaleDateString()}
+                    variant="paid"
+                  />
+                ))
+              ))}
+            </div>
           )}
         </div>
 

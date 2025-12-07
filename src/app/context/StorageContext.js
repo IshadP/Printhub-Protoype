@@ -78,9 +78,14 @@ export function StorageProvider({ children }) {
   };
 
   const createOrder = (paymentDetails) => {
-    const selectedFiles = files.filter(f => cart.includes(f.id));
+    // If cart has items, use them. Else (Print All mode), use all files.
+    const selectedFiles = cart.length > 0 ? files.filter(f => cart.includes(f.id)) : files;
+
+    // Safety check: don't create empty orders if files is also empty
+    if (selectedFiles.length === 0) return;
+
     const newOrder = {
-      id: `ORD-${Date.now()}`,
+      id: `ORD-${Math.floor(100000 + Math.random() * 900000)}`,
       date: new Date().toISOString(),
       items: selectedFiles,
       total: selectedFiles.reduce((acc, file) => acc + (file.config.copies * 10), 0), // Mock calc
