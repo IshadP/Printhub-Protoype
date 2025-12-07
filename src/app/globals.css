@@ -329,6 +329,15 @@ body {
   font-family: var(--font-roboto);
 }
 
+/* Smooth Transition for Theme Switching */
+*,
+*::before,
+*::after {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
+}
+
 /* Material Icons Utility */
 .material-icons {
   font-family: 'Material Icons';
