@@ -107,7 +107,7 @@ const ItemCard = ({
     return (
         <div className="relative overflow-hidden rounded-lg">
             {/* Background Layer (Delete) */}
-            <div className="absolute inset-0 bg-red-500 flex items-center justify-end px-6 rounded-[4px]">
+            <div className="absolute inset-0 bg-red-500 flex items-center justify-end px-6 rounded-[12px]">
                 <Icon name="delete" size={24} className="text-white" />
             </div>
 
@@ -126,7 +126,7 @@ const ItemCard = ({
                 style={{ transform: `translateX(${offset}px)`, transition: isSwiping ? 'none' : 'transform 0.2s ease-out' }}
                 className={`
                     relative flex items-center p-4 gap-4 rounded-lg transition-colors duration-200 select-none 
-                    ${selected ? 'bg-secondary-container' : 'bg-surface-bright'}
+                    ${selected ? 'bg-secondary-container ' : 'bg-surface-bright border border-surface-bright'}
                 `}
             >
                 {/* Selection Indicator (Only when selected) */}
