@@ -4,7 +4,6 @@ import Icon from './Icon';
 const ActionButtons = ({ onAdd, onPrint, selectedCount = 0 }) => {
     return (
         <div className="mx-4 flex justify-start items-center gap-1 w-full rounded-full overflow-x-hidden shadow-[0px_2px_3px_0px_rgba(0,0,0,0.30)] shadow-[0px_6px_10px_4px_rgba(0,0,0,0.15)]">
-            {/* Add Files Button */}
             <button
                 onClick={onAdd}
                 className="flex justify-center items-center bg-surface-bright w-full active:scale-95 transition-transform "
@@ -16,8 +15,6 @@ const ActionButtons = ({ onAdd, onPrint, selectedCount = 0 }) => {
                     </div>
                 </div>
             </button>
-
-            {/* Print Files Button */}
             <button
                 onClick={onPrint}
                 className="flex justify-center items-center bg-primary w-full active:scale-95 transition-transform rounded-sm"

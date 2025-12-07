@@ -3,9 +3,11 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import TopBar from "../components/topbar";
-import UploadCard from "../components/UploadCard";
+import Icon from "../components/Icon";
+import ItemCard from "../components/ItemCard";
 import Button from "../components/Button";
 import BottomSheet from "../components/BottomSheet";
+import Navbar from "../components/navbar";
 import { useStorage } from "../context/StorageContext";
 
 // Mock file generator
@@ -17,7 +19,7 @@ const generateMockFiles = (count = 1) => {
         id: `temp-${Date.now()}-${i}`,
         name: names[Math.floor(Math.random() * names.length)],
         type: types[Math.floor(Math.random() * types.length)],
-        size: Math.floor(Math.random() * 5000000) + 100000, // 100KB - 5MB
+        size: Math.floor(Math.random() * 5000000) + 100000,
         pages: Math.floor(Math.random() * 20) + 1,
         date: new Date().toISOString(),
         config: {
@@ -36,12 +38,10 @@ export default function UploadPage() {
     const [stagedFiles, setStagedFiles] = useState([]);
     const [editingFileId, setEditingFileId] = useState(null);
 
-    // Simulate file picker on mount (or we could have a button)
+    // Simulate file picker on mount
     useEffect(() => {
-        // For prototype, we auto-add some files to "stage" when entering this view
-        // In real app, this would be triggered by an input[type=file]
         if (stagedFiles.length === 0) {
-            setStagedFiles(generateMockFiles(3));
+            setStagedFiles(generateMockFiles(2));
         }
     }, []);
 
@@ -60,7 +60,6 @@ export default function UploadPage() {
     };
 
     const handleUploadAll = () => {
-        // Convert temp IDs to permanent ones if needed, or just keep them
         const filesToUpload = stagedFiles.map(f => ({
             ...f,
             id: `file-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
@@ -74,44 +73,39 @@ export default function UploadPage() {
 
     return (
         <div className="flex min-h-screen items-center justify-center bg-surface-dim">
-            <div className="aspect-270/600 border-2 h-[90vh] rounded-3xl overflow-hidden relative flex flex-col bg-surface-bright shadow-2xl">
+            <div className="aspect-270/600 border-2 h-[90vh] rounded-3xl overflow-hidden relative flex flex-col justify-start top-0 bg-primary-container shadow-2xl">
                 <TopBar
-                    title="Upload Files"
-                    showBackButton={true}
-                    onBack={() => router.back()}
+                    title="Printhub"
+                    showBackButton={false}
                 />
 
-                <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-4">
-                    <div className="flex justify-between items-center">
-                        <h2 className="font-material-titlemedium text-on-surface">Selected Files ({stagedFiles.length})</h2>
+                <div className="flex-1 overflow-y-auto px-4 flex flex-col gap-4">
+                    {/* Sub-header with Title and Change Files button */}
+                    <div className="flex justify-between items-center mt-4">
+                        <h2 className="font-material-titlemedium text-on-surface-variant font-bold text-green-800">Add Files</h2>
                         <button
                             onClick={() => setStagedFiles(prev => [...prev, ...generateMockFiles(1)])}
-                            className="text-primary font-material-labelmedium"
+                            className="bg-primary hover:bg-green-600 text-white px-4 py-1.5 rounded-full font-material-labelmedium transition-colors"
                         >
-                            + Add More
+                            Change Files
                         </button>
                     </div>
 
-                    <div className="flex flex-col">
+                    <div className="flex flex-col gap-2">
                         {stagedFiles.map(file => (
-                            <UploadCard
+                            <ItemCard
                                 key={file.id}
                                 file={file}
-                                onRemove={handleRemove}
                                 onEdit={handleEdit}
+                                onDelete={handleRemove}
+                                // Mock selection props since they are required by ItemCard internal logic for some styles
+                                selectionMode={false}
+                                selected={false}
+                                onSelect={() => { }}
+                                onLongPress={() => { }}
                             />
                         ))}
                     </div>
-                </div>
-
-                <div className="p-4 bg-surface-bright border-t border-outline-variant">
-                    <Button
-                        fullWidth
-                        onClick={handleUploadAll}
-                        disabled={stagedFiles.length === 0}
-                    >
-                        Upload All
-                    </Button>
                 </div>
 
                 <BottomSheet
@@ -120,7 +114,21 @@ export default function UploadPage() {
                     file={editingFile}
                     onSave={handleSaveConfig}
                 />
+
+                <div className="px-4 mb-4 mt-auto">
+                    <Button
+                        onClick={handleUploadAll}
+                        fullWidth
+                        className="py-6"
+                    >
+                        <Icon name="upload" size={24} />
+                        <p className="font-material-titlemedium text-on-primary">Upload All files</p>
+                    </Button>
+                </div>
+
+                <Navbar />
             </div>
         </div>
     );
 }
+

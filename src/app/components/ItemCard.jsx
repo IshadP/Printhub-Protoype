@@ -75,7 +75,7 @@ const ItemCard = ({
     return (
         <div className="relative overflow-hidden rounded-lg">
             {/* Background Layer (Delete) */}
-            <div className="absolute inset-0 bg-red-500 flex items-center justify-end px-6 rounded-[10px]">
+            <div className="absolute inset-0 bg-red-500 flex items-center justify-end px-6 rounded-[4px]">
                 <Icon name="delete" size={24} className="text-white" />1
             </div>
 
@@ -147,7 +147,7 @@ const ItemCard = ({
                         </div>
 
                         {/* Copies */}
-                        <span className={`font-material-bodylarge ml-1 transition-colors ${file.config.copies > 1 ? 'text-primary font-material-titlemedium' : 'text-on-surface font-material-titlemedium'}`}>
+                        <span className={`font-material-bodylarge ml-1 transition-colors ${file.config.copies > 1 ? 'text-on-surface font-material-titlemedium' : 'text-on-surface font-material-titlemedium'}`}>
                             x{file.config.copies}
                         </span>
                     </div>

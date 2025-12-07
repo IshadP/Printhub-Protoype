@@ -73,7 +73,7 @@ export default function Home() {
 
         <div className="flex-1 overflow-y-auto px-4 flex flex-col gap-4">
           {files.length === 0 ? (
-            <div className="flex flex-col gap-6 mt-4">
+            <div className="flex flex-col gap-6 mt-4 h-full">
               <div className="flex flex-col gap-4">
                 <h2 className="font-material-titlemedium text-on-surface">Quick Print</h2>
                 <div className="grid grid-rows-1 grid-flow-col gap-2 overflow-x-auto pb-4">
@@ -108,8 +108,11 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              <div className="text-center text-on-surface-variant font-material-bodylarge mt-4">
-                No files in inventory
+              <div className="flex justify-between items-center mb-2">
+                <h2 className="font-material-titlemedium text-on-surface">My Files</h2>
+              </div>
+              <div className="flex flex-col gap-1 overflow-hidden h-[100%] justify-center items-center">
+                <p className="font-material-titlemedium text-primary text-center"> Tap the "+ Add Files" button to get started. <br />All your documents will appear here</p>
               </div>
             </div>
           ) : (
@@ -153,18 +156,20 @@ export default function Home() {
               <div className="flex justify-between items-center mb-2">
                 <h2 className="font-material-titlemedium text-on-surface">My Files</h2>
               </div>
-              <div className="flex flex-col gap-1 rounded-3xl overflow-hidden">
-                {files.map(file => (
-                  <ItemCard
-                    key={file.id}
-                    file={file}
-                    selectionMode={isSelectionMode}
-                    selected={cart.includes(file.id)}
-                    onSelect={toggleSelection}
-                    onLongPress={enterSelectionMode}
-                    onEdit={handleEdit}
-                  />
-                ))}
+              <div className="h-full rounded-3xl overflow-hidden ">
+                <div className="flex flex-col gap-1 flex-1 overflow-y">
+                  {files.map(file => (
+                    <ItemCard
+                      key={file.id}
+                      file={file}
+                      selectionMode={isSelectionMode}
+                      selected={cart.includes(file.id)}
+                      onSelect={toggleSelection}
+                      onLongPress={enterSelectionMode}
+                      onEdit={handleEdit}
+                    />
+                  ))}
+                </div>
               </div>
             </>
           )}
