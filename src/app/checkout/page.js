@@ -10,13 +10,11 @@ import Icon from "../components/Icon";
 import { useStorage } from "../context/StorageContext";
 
 const PrinterInfoCard = () => (
-    <div className="bg-surface-bright p-2 rounded-2xl flex flex-col gap-4 p-4 items-center justify-start mb-4">
-        <div className="flex items-center gap-3">
-            <div>
-                <p>Selected Printer</p>
-                <h3 className="font-material-titlemedium text-on-surface">Printer A1</h3>
+    <div className="bg-surface-bright p-2 rounded-2xl flex flex-col gap-4 p-4 justify-start mb-4">
 
-            </div>
+        <div className="flex flex-col items-center justify-start items-start ">
+            <p className="font-material-bodysmall text-on-surface">Selected Printer</p>
+            <h3 className="font-material-titlemedium text-on-surface">Printer Printhub</h3>
         </div>
         <div className='flex items-center justify-between w-full'>
             <p className="font-material-titlesmall text-on-primary-container bg-primary-container rounded-full px-4 py-2 flex justify-center items-center gap-1">
@@ -28,10 +26,10 @@ const PrinterInfoCard = () => (
 );
 
 const PaymentCard = ({ total }) => (
-    <div className="bg-surface-container-low p-4 rounded-xl flex flex-col gap-3 mb-4">
+    <div className="font-material-titlemedium text-on-primary-container px-2 border-t-2 border-primary flex flex-col gap-3 mb-4">
         <div className="flex justify-between items-center">
-            <span className="font-material-bodylarge text-on-surface">Total Amount</span>
-            <span className="font-material-titlelarge text-on-surface">₹{total}</span>
+            <span className="">Total Amount</span>
+            <span className="">₹{total}</span>
         </div>
     </div>
 );
@@ -51,6 +49,10 @@ export default function CheckoutPage() {
         router.push('/success');
     };
 
+    const handleReturn = () => {
+        router.push('/');
+    };
+
     const editingFile = selectedFiles.find(f => f.id === editingFileId);
 
     return (
@@ -62,23 +64,31 @@ export default function CheckoutPage() {
                     <PrinterInfoCard />
 
                     <h3 className="font-material-titlemedium text-on-surface mb-2">Selected Files</h3>
-                    <div className="flex flex-col gap-2 mb-6">
-                        {selectedFiles.map(file => (
-                            <ItemCard
-                                key={file.id}
-                                file={file}
-                                selectionMode={false} // Allow editing here
-                                onEdit={setEditingFileId}
-                            />
-                        ))}
+                    <div className="rounded-3xl overflow-hidden mb-4">
+                        <div className="flex flex-col gap-1 flex-1 overflow-y">
+                            {selectedFiles.map(file => (
+                                <ItemCard
+                                    key={file.id}
+                                    file={file}
+                                    selectionMode={false} // Allow editing here
+                                    onEdit={setEditingFileId}
+                                />
+                            ))}
+                        </div>
                     </div>
 
                     <PaymentCard total={total} />
                 </div>
 
-                <div className="p-4 bg-surface-bright border-t border-outline-variant">
+                <div className="flex gap-2 bg-surface-bright border-t border-outline-variant justify-end p-4 gap-2">
                     <Button
-                        fullWidth
+                        variant="text"
+                        onClick={handleReturn}
+                    >
+                        Cancel
+                    </Button>
+                    <Button
+                        variant="primary"
                         onClick={handlePay}
                     >
                         Pay ₹{total}
