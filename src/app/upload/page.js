@@ -74,7 +74,7 @@ export default function UploadPage() {
     return (
         <div className="flex min-h-screen items-center justify-center bg-surface-dim gap-12">
             {/* Phone Frame */}
-            <div className="aspect-270/600 border-2 h-[90vh] rounded-3xl overflow-hidden relative flex flex-col justify-start top-0 bg-primary-container shadow-2xl">
+            <div className="w-full h-full min-h-screen md:min-h-0 md:w-auto md:aspect-270/600 md:h-[90vh] md:border-2 md:rounded-3xl overflow-hidden relative flex flex-col justify-start top-0 bg-primary-container shadow-none md:shadow-2xl">
                 <TopBar
                     title="Printhub"
                     showBackButton={false}

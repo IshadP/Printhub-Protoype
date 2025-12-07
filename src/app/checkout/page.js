@@ -57,7 +57,7 @@ export default function CheckoutPage() {
 
     return (
         <div className="flex min-h-screen items-center justify-center bg-surface-dim">
-            <div className="aspect-270/600 border-2 h-[90vh] rounded-3xl overflow-hidden relative flex flex-col bg-primary-container shadow-2xl">
+            <div className="w-full h-full min-h-screen md:min-h-0 md:w-auto md:aspect-270/600 md:h-[90vh] md:border-2 md:rounded-3xl overflow-hidden relative flex flex-col bg-primary-container shadow-none md:shadow-2xl">
                 <TopBar />
 
                 <div className="flex-1 overflow-y-auto p-4 flex flex-col">
