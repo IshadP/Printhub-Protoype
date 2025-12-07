@@ -10,8 +10,8 @@ const ActionButtons = ({ onAdd, addHref, onPrint, selectedCount = 0, printDisabl
             {addHref ? (
                 <Link href={addHref} className={buttonClass}>
                     <div className="px-4 py-2.5 inline-flex justify-center items-center gap-2">
-                        <Icon name="add" size={24} className="text-primary" />
-                        <div className="justify-center text-primary font-material-labellarge leading-5 tracking-tight">
+                        <Icon name="add" size={24} className="text-on-surface" />
+                        <div className="justify-center text-on-surface font-material-labellarge leading-5 tracking-tight">
                             Add Files
                         </div>
                     </div>
@@ -22,8 +22,8 @@ const ActionButtons = ({ onAdd, addHref, onPrint, selectedCount = 0, printDisabl
                     className={buttonClass}
                 >
                     <div className="px-4 py-2.5 inline-flex justify-center items-center gap-2">
-                        <Icon name="add" size={24} className="text-primary" />
-                        <div className="justify-center text-primary font-material-labellarge leading-5 tracking-tight">
+                        <Icon name="add" size={24} className="text-on-surface" />
+                        <div className="justify-center text-on-surface font-material-labellarge leading-5 tracking-tight">
                             Add Files
                         </div>
                     </div>

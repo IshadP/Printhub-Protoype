@@ -10,14 +10,40 @@ export function StorageProvider({ children }) {
   const [cart, setCart] = useState([]); // IDs of selected files
   const [isSelectionMode, setIsSelectionMode] = useState(false);
 
-  // Load from Session Storage on mount
+  // Theme State
+  const [theme, setTheme] = useState('system'); // 'light', 'dark', 'system'
+
+  // Load from Session/Local Storage on mount
   useEffect(() => {
     const storedFiles = sessionStorage.getItem('ph_files');
     const storedOrders = sessionStorage.getItem('ph_orders');
+    const storedTheme = localStorage.getItem('ph_theme');
 
     if (storedFiles) setFiles(JSON.parse(storedFiles));
     if (storedOrders) setOrders(JSON.parse(storedOrders));
+    if (storedTheme) setTheme(storedTheme);
   }, []);
+
+  // Theme Effect: Apply class to documentElement
+  useEffect(() => {
+    const root = document.documentElement;
+    const isDark = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+
+    if (isDark) {
+      root.classList.add('dark');
+    } else {
+      root.classList.remove('dark');
+    }
+  }, [theme]);
+
+  // Save theme
+  useEffect(() => {
+    if (theme !== 'system') {
+      localStorage.setItem('ph_theme', theme);
+    } else {
+      localStorage.removeItem('ph_theme');
+    }
+  }, [theme]);
 
   // Save to Session Storage on change
   useEffect(() => {
@@ -120,7 +146,9 @@ export function StorageProvider({ children }) {
       enterSelectionMode,
       exitSelectionMode,
       createOrder,
-      clearSession
+      clearSession,
+      theme,
+      toggleTheme: () => setTheme(prev => prev === 'dark' ? 'light' : 'dark'),
     }}>
       {children}
     </StorageContext.Provider>

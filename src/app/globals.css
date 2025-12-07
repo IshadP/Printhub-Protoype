@@ -71,7 +71,7 @@
   --surface-dim: var(--grey-1);
   --surface: var(--grey-0-5);
   --surface-bright: var(--grey-0);
-  
+
   --surface-container-lowest: var(--grey-1-5);
   --surface-container-low: var(--grey-2);
   --surface-container: var(--grey-3);
@@ -86,6 +86,8 @@
 }
 
 /* 3. DARK MODE (Disabled for Light Theme Preference) */
+
+
 /* @media (prefers-color-scheme: dark) {
   :root {
     --primary: var(--green-8);
@@ -119,8 +121,41 @@
     --outline: var(--grey-3);
     --outline-variant: var(--green-1);
   }
-} 
-*/
+} */
+
+:root:is(.dark) {
+  --primary: var(--green-8);
+  --on-primary: var(--green-1);
+  --primary-container: var(--grey-14);
+  --on-primary-container: var(--green-0);
+
+  --secondary: var(--green-11);
+  --on-secondary: var(--green-3);
+  --secondary-container: var(--green-11);
+  --on-secondary-container: var(--green-6);
+
+  --error: var(--color-error-base);
+  --error-container: #7D2B25FF;
+  --on-error-container: #FFDAD6FF;
+  --on-error: var(--grey-0-5);
+
+  --surface-dim: var(--grey-15);
+  --surface: var(--grey-14);
+  --surface-bright: var(--grey-13);
+
+  --surface-container-lowest: var(--grey-15);
+  --surface-container-low: var(--grey-13);
+  --surface-container: var(--grey-10);
+  --surface-container-high: var(--grey-6);
+  --surface-container-highest: var(--grey-5);
+
+  --on-surface: var(--grey-2);
+  --on-surface-variant: var(--grey-0-5);
+
+  --outline: var(--grey-3);
+  --outline-variant: var(--green-1);
+}
+
 
 /* 4. TAILWIND CONFIGURATION */
 @theme {
@@ -151,7 +186,7 @@
   --color-surface: var(--surface);
   --color-surface-dim: var(--surface-dim);
   --color-surface-bright: var(--surface-bright);
-  
+
   --color-surface-container-lowest: var(--surface-container-lowest);
   --color-surface-container-low: var(--surface-container-low);
   --color-surface-container: var(--surface-container);
@@ -166,44 +201,132 @@
 }
 
 @layer utilities {
-  .font-material-displaylarge { @apply font-roboto text-6xl font-normal leading-none tracking-normal; }
-  .font-material-displaymedium { @apply font-roboto text-5xl font-normal leading-tight; }
-  .font-material-displaysmall { @apply font-roboto text-4xl font-normal leading-tight; }
-  .font-material-headlinelarge { @apply font-roboto text-3xl font-normal leading-10; }
-  .font-material-headlinemedium { @apply font-roboto text-3xl font-normal leading-9; }
-  .font-material-headlinesmall { @apply font-roboto text-2xl font-normal leading-8; }
-  .font-material-bodylarge { @apply font-roboto text-base font-normal leading-6 tracking-wide; }
-  .font-material-bodymedium { @apply font-roboto text-sm font-normal leading-5 tracking-wide; }
-  .font-material-bodysmall { @apply font-roboto text-xs font-normal leading-4 tracking-wide; }
-  .font-material-labellarge { @apply font-roboto text-sm font-medium leading-5 tracking-normal; }
-  .font-material-labelmedium { @apply font-roboto text-xs font-medium leading-4 tracking-wider; }
-  .font-material-labelsmall { @apply font-roboto text-xs font-medium leading-4 tracking-wider; }
-  .font-material-titlelarge { @apply font-roboto text-xl font-normal leading-7; }
-  .font-material-titlemedium { @apply font-roboto text-base font-medium leading-6 tracking-normal; }
-  .font-material-titlesmall { @apply font-roboto text-sm font-medium leading-5 tracking-normal; }
-  
-   .font-material-displaylarge-p { @apply font-roboto text-6xl font-bold leading-none tracking-normal; }
-  .font-material-displaymedium-p { @apply font-roboto text-5xl font-bold leading-tight; }
-  .font-material-displaysmall-p { @apply font-roboto text-4xl font-bold leading-tight; }
-  .font-material-headlinelarge-p { @apply font-roboto text-3xl font-bold leading-10; }
-  .font-material-headlinemedium-p { @apply font-roboto text-3xl font-bold leading-9; }
-  .font-material-headlinesmall-p { @apply font-roboto text-2xl font-bold leading-8; }
-  .font-material-bodylarge-p { @apply font-roboto text-base font-bold leading-6 tracking-wide; }
-  .font-material-bodymedium-p { @apply font-roboto text-sm font-bold leading-5 tracking-wide; }
-  .font-material-bodysmall-p { @apply font-roboto text-xs font-bold leading-4 tracking-wide; }
-  .font-material-labellarge-p { @apply font-roboto text-sm font-bold leading-5 tracking-normal; }
-  .font-material-labelmedium-p { @apply font-roboto text-xs font-bold leading-4 tracking-wider; }
-  .font-material-labelsmall-p { @apply font-roboto text-xs font-bold leading-4 tracking-wider; }
-  .font-material-titlelarge-p { @apply font-roboto text-xl font-bold leading-7; }
-  .font-material-titlemedium-p { @apply font-roboto text-base font-bold leading-6 tracking-normal; }
-  .font-material-titlesmall-p { @apply font-roboto text-sm font-bold leading-5 tracking-normal; }
+  .font-material-displaylarge {
+    @apply font-roboto text-6xl font-normal leading-none tracking-normal;
+  }
+
+  .font-material-displaymedium {
+    @apply font-roboto text-5xl font-normal leading-tight;
+  }
+
+  .font-material-displaysmall {
+    @apply font-roboto text-4xl font-normal leading-tight;
+  }
+
+  .font-material-headlinelarge {
+    @apply font-roboto text-3xl font-normal leading-10;
+  }
+
+  .font-material-headlinemedium {
+    @apply font-roboto text-3xl font-normal leading-9;
+  }
+
+  .font-material-headlinesmall {
+    @apply font-roboto text-2xl font-normal leading-8;
+  }
+
+  .font-material-bodylarge {
+    @apply font-roboto text-base font-normal leading-6 tracking-wide;
+  }
+
+  .font-material-bodymedium {
+    @apply font-roboto text-sm font-normal leading-5 tracking-wide;
+  }
+
+  .font-material-bodysmall {
+    @apply font-roboto text-xs font-normal leading-4 tracking-wide;
+  }
+
+  .font-material-labellarge {
+    @apply font-roboto text-sm font-medium leading-5 tracking-normal;
+  }
+
+  .font-material-labelmedium {
+    @apply font-roboto text-xs font-medium leading-4 tracking-wider;
+  }
+
+  .font-material-labelsmall {
+    @apply font-roboto text-xs font-medium leading-4 tracking-wider;
+  }
+
+  .font-material-titlelarge {
+    @apply font-roboto text-xl font-normal leading-7;
+  }
+
+  .font-material-titlemedium {
+    @apply font-roboto text-base font-medium leading-6 tracking-normal;
+  }
+
+  .font-material-titlesmall {
+    @apply font-roboto text-sm font-medium leading-5 tracking-normal;
+  }
+
+  .font-material-displaylarge-p {
+    @apply font-roboto text-6xl font-bold leading-none tracking-normal;
+  }
+
+  .font-material-displaymedium-p {
+    @apply font-roboto text-5xl font-bold leading-tight;
+  }
+
+  .font-material-displaysmall-p {
+    @apply font-roboto text-4xl font-bold leading-tight;
+  }
+
+  .font-material-headlinelarge-p {
+    @apply font-roboto text-3xl font-bold leading-10;
+  }
+
+  .font-material-headlinemedium-p {
+    @apply font-roboto text-3xl font-bold leading-9;
+  }
+
+  .font-material-headlinesmall-p {
+    @apply font-roboto text-2xl font-bold leading-8;
+  }
+
+  .font-material-bodylarge-p {
+    @apply font-roboto text-base font-bold leading-6 tracking-wide;
+  }
+
+  .font-material-bodymedium-p {
+    @apply font-roboto text-sm font-bold leading-5 tracking-wide;
+  }
+
+  .font-material-bodysmall-p {
+    @apply font-roboto text-xs font-bold leading-4 tracking-wide;
+  }
+
+  .font-material-labellarge-p {
+    @apply font-roboto text-sm font-bold leading-5 tracking-normal;
+  }
+
+  .font-material-labelmedium-p {
+    @apply font-roboto text-xs font-bold leading-4 tracking-wider;
+  }
+
+  .font-material-labelsmall-p {
+    @apply font-roboto text-xs font-bold leading-4 tracking-wider;
+  }
+
+  .font-material-titlelarge-p {
+    @apply font-roboto text-xl font-bold leading-7;
+  }
+
+  .font-material-titlemedium-p {
+    @apply font-roboto text-base font-bold leading-6 tracking-normal;
+  }
+
+  .font-material-titlesmall-p {
+    @apply font-roboto text-sm font-bold leading-5 tracking-normal;
+  }
 }
 
 /* Global Reset */
 body {
   margin: 0;
   padding: 0;
-  font-family: var(--font-roboto); 
+  font-family: var(--font-roboto);
 }
 
 /* Material Icons Utility */

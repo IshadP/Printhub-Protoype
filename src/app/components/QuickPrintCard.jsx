@@ -7,10 +7,10 @@ const QuickPrintCard = ({ title, onClick }) => {
             onClick={onClick}
             className="bg-surface-bright rounded-lg p-3 flex items-center justify-between cursor-pointer border-outline hover:shadow-md transition-all active:scale-[0.98] items-center "
         >
-            <span className="font-material-titlemedium text-primary-container-text font-semibold">
+            <span className="font-material-titlemedium text-on-surface font-semibold">
                 {title}
             </span>
-            <div className="text-primary">
+            <div className="text-on-surface">
                 <Icon name="add_circle" size={24} />
             </div>
         </div>
