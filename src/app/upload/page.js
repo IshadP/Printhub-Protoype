@@ -72,9 +72,9 @@ export default function UploadPage() {
     const editingFile = stagedFiles.find(f => f.id === editingFileId);
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-surface-dim gap-12">
+        <div className="flex min-h-screen items-center justify-center bg-surface-dim md:gap-12 relative">
             {/* Phone Frame */}
-            <div className="w-full h-full min-h-screen md:min-h-0 md:w-auto md:aspect-270/600 md:h-[90vh] md:border-2 md:rounded-3xl overflow-hidden relative flex flex-col justify-start top-0 bg-primary-container shadow-none md:shadow-2xl">
+            <div className="w-full h-full min-h-screen md:min-h-0 md:w-auto md:aspect-270/600 md:h-[90vh] md:border-2 md:rounded-3xl overflow-hidden relative flex flex-col justify-start top-0 bg-primary-container shadow-none md:shadow-2xl z-0">
                 <TopBar
                     title="Printhub"
                     showBackButton={false}
@@ -91,21 +91,22 @@ export default function UploadPage() {
                             Change Files
                         </button>
                     </div>
-
-                    <div className="flex flex-col gap-2">
-                        {stagedFiles.map(file => (
-                            <ItemCard
-                                key={file.id}
-                                file={file}
-                                onEdit={handleEdit}
-                                onDelete={handleRemove}
-                                // Mock selection props since they are required by ItemCard internal logic for some styles
-                                selectionMode={false}
-                                selected={false}
-                                onSelect={() => { }}
-                                onLongPress={() => { }}
-                            />
-                        ))}
+                    <div className='rounded-2xl overflow-x-hidden'>
+                        <div className="flex flex-col gap-1">
+                            {stagedFiles.map(file => (
+                                <ItemCard
+                                    key={file.id}
+                                    file={file}
+                                    onEdit={handleEdit}
+                                    onDelete={handleRemove}
+                                    // Mock selection props since they are required by ItemCard internal logic for some styles
+                                    selectionMode={false}
+                                    selected={false}
+                                    onSelect={() => { }}
+                                    onLongPress={() => { }}
+                                />
+                            ))}
+                        </div>
                     </div>
                 </div>
 
@@ -130,21 +131,15 @@ export default function UploadPage() {
                 <Navbar />
             </div>
 
-            {/* Simulation Controls */}
-            <div className="flex flex-col gap-4">
-                <div className="bg-white p-6 rounded-2xl shadow-lg flex flex-col gap-4 max-w-xs">
-                    <h3 className="font-bold text-lg text-gray-800">Simulation Controls</h3>
-                    <p className="text-sm text-gray-600">Simulate adding files from the operating system or other apps.</p>
-                    <button
-                        onClick={() => setStagedFiles(prev => [...prev, ...generateMockFiles(1)])}
-                        className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-4 rounded-xl flex items-center gap-3 font-semibold shadow-md transition-all active:scale-95"
-                    >
-                        <Icon name="add" size={24} className="text-white" />
-                        Simulate OS selection
-                    </button>
-                </div>
-            </div>
-        </div>
+            {/* Float Action Button / Desktop Side Button */}
+            <button
+                onClick={() => setStagedFiles(prev => [...prev, ...generateMockFiles(1)])}
+                className="fixed bottom-6 right-6 md:static md:bottom-auto md:right-auto z-50 bg-purple-600 hover:bg-purple-700 text-white px-6 py-4 rounded-full flex items-center gap-3 font-semibold shadow-xl transition-all active:scale-95"
+            >
+                <Icon name="add" size={24} className="text-white" />
+                Add File
+            </button>
+        </div >
     );
 }
 
