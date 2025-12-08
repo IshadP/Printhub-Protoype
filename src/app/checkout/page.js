@@ -17,7 +17,7 @@ const PrinterInfoCard = () => (
             <h3 className="font-material-titlemedium text-on-surface">Printer Printhub</h3>
         </div>
         <div className='flex items-center justify-between w-full'>
-            <p className="font-material-titlesmall text-on-primary-container bg-primary-container rounded-full px-4 py-2 flex justify-center items-center gap-1">
+            <p className="font-material-titlesmall text-on-secondary-container bg-secondary-container rounded-full px-4 py-2 flex justify-center items-center gap-1">
                 Online
             </p>
             <button className="bg-primary rounded-lg p-2 font-material-labellarge text-on-primary">Change Printer</button>
@@ -26,7 +26,7 @@ const PrinterInfoCard = () => (
 );
 
 const PaymentCard = ({ total }) => (
-    <div className="font-material-titlemedium text-on-primary-container px-2 border-t-2 border-primary flex flex-col gap-3 mb-4">
+    <div className="font-material-titlemedium text-on-primary-container px-2 border-t-2 border-primary flex flex-col gap-4 pt-2 mb-4 ">
         <div className="flex justify-between items-center">
             <span className="">Total Amount</span>
             <span className="">₹{total}</span>

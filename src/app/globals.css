@@ -124,7 +124,7 @@
 } */
 
 :root:is(.dark) {
-  --primary: var(--green-8);
+  --primary: var(--green-7);
   --on-primary: var(--green-1);
   --primary-container: var(--grey-14);
   --on-primary-container: var(--green-0);

@@ -14,8 +14,8 @@ const Button = ({
 
     const variants = {
         primary: "bg-primary text-on-primary hover:bg-opacity-90 shadow-sm",
-        secondary: "bg-secondary-container text-on-secondary-container hover:bg-opacity-80",
-        tonal: "bg-secondary-container text-on-secondary-container hover:bg-opacity-80", // Mapping tonal to secondary container for now
+        secondary: "bg-secondary-container text-primary hover:bg-opacity-80",
+        tonal: "bg-secondary-container text-primary hover:bg-opacity-80", // Mapping tonal to secondary container for now
         text: "bg-transparent text-primary hover:bg-surface-container-low",
         outline: "border border-outline text-primary hover:bg-surface-container-low"
     };

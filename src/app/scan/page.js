@@ -21,7 +21,7 @@ export default function ScanPage() {
 
                 {/* Camera Overlay */}
                 <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
-                    <div className="w-64 h-64 border-2 border-primary rounded-3xl relative">
+                    <div className="w-64 h-64 border-2 rounded-3xl relative">
                         <div className="absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 border-primary rounded-tl-xl" />
                         <div className="absolute top-0 right-0 w-8 h-8 border-t-4 border-r-4 border-primary rounded-tr-xl" />
                         <div className="absolute bottom-0 left-0 w-8 h-8 border-b-4 border-l-4 border-primary rounded-bl-xl" />
