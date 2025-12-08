@@ -18,8 +18,8 @@ export default function OrdersPage() {
           <h2 className="font-material-titlemedium text-on-surface mb-2">Past Orders</h2>
 
           {orders.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-64 text-on-surface-variant">
-              <p>No orders yet</p>
+            <div className="flex flex-col items-center justify-center h-64 text-on-primary-container">
+              <p className="font-material-titlemedium text-on-primary-container">No orders yet</p>
             </div>
           ) : (
             <div className="rounded-2xl overflow-hidden flex flex-col gap-1">
