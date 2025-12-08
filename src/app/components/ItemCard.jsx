@@ -18,29 +18,30 @@ const ItemCard = ({
     const x = useMotionValue(0);
 
     // Tap & Long Press Logic
-    const timerRef = useRef(null);
-    const isLongPress = useRef(false);
+    // const timerRef = useRef(null);
+    // const isLongPress = useRef(false);
 
-    function handleTapStart() {
-        isLongPress.current = false;
-        timerRef.current = setTimeout(() => {
-            isLongPress.current = true;
-            if (onLongPress) onLongPress(file.id);
-        }, 500);
-    }
+    // function handleTapStart() {
+    //     isLongPress.current = false;
+    //     timerRef.current = setTimeout(() => {
+    //         isLongPress.current = true;
+    //         if (onLongPress) onLongPress(file.id);
+    //     }, 500);
+    // }
 
-    function handleTapCancel() {
-        clearTimeout(timerRef.current);
-    }
+    // function handleTapCancel() {
+    //     clearTimeout(timerRef.current);
+    // }
 
     function handleTap() {
-        clearTimeout(timerRef.current);
-        if (!isLongPress.current) {
-            if (selectionMode) {
-                onSelect(file.id);
-            } else {
-                console.log('Tapped file:', file.name);
-            }
+        // Simple tap to select
+        if (selectionMode) {
+            onSelect(file.id);
+        } else {
+            // If not in selection mode, maybe we still want to select? 
+            // User said "add only tap to select code". 
+            // Usually this means tap toggles selection.
+            onSelect(file.id);
         }
     }
 
@@ -48,7 +49,7 @@ const ItemCard = ({
     const bgRightWidth = useTransform(x, (value) => Math.max(0, -value));
 
     function handleDragStart() {
-        clearTimeout(timerRef.current);
+        // clearTimeout(timerRef.current);
     }
 
     const handleDragEnd = async (event, info) => {
@@ -64,16 +65,16 @@ const ItemCard = ({
             // Animate off screen
             await controls.start({ x: direction * (width + 100), opacity: 0 });
             onDelete(file.id);
-        } else{
+        } else {
             controls.start({ x: 0, opacity: 1 });
         }
     };
 
-    if (isDeleting && !onDelete) return null; 
+    if (isDeleting && !onDelete) return null;
 
     return (
         <div className="relative rounded-lg w-full h-[88px]">
-    
+
             <motion.div
                 className="absolute inset-y-2 left-0 bg-red-600 flex items-center justify-center z-0 rounded-full overflow-hidden"
                 style={{ width: bgLeftWidth }}
@@ -94,10 +95,10 @@ const ItemCard = ({
                 drag="x"
                 dragConstraints={{ left: 0, right: 0 }}
                 dragElastic={0.7} // Flexible drag for smoother feel
-                onDragStart={handleDragStart} // Cancel tap/long-press on drag
+                // onDragStart={handleDragStart} // Cancel tap/long-press on drag (No longer needed since simple tap)
                 onDragEnd={handleDragEnd}
-                onTapStart={handleTapStart}
-                onTapCancel={handleTapCancel}
+                // onTapStart={handleTapStart}
+                // onTapCancel={handleTapCancel}
                 onTap={handleTap}
                 animate={controls}
                 style={{ x }}
@@ -123,7 +124,7 @@ const ItemCard = ({
                 )}
 
                 <div className="flex-1 min-w-0 flex flex-col gap-2">
-        
+
                     <h3 className="font-material-titlesmall text-on-surface truncate font-medium">
                         {file.name}
                     </h3>
