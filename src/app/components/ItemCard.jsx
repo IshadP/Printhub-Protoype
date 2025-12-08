@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import Icon from './Icon';
 import Image from 'next/image';
-import useLongPress from '../hooks/useLongPress';
+import { motion, useMotionValue, useTransform, useAnimation, PanInfo } from 'framer-motion';
 
 const ItemCard = ({
     file,
@@ -12,140 +12,122 @@ const ItemCard = ({
     onLongPress,
     onDelete
 }) => {
+    const cardRef = useRef(null);
+    const [isDeleting, setIsDeleting] = useState(false);
+    const controls = useAnimation();
+    const x = useMotionValue(0);
 
-    const longPressProps = useLongPress(
-        () => onLongPress && onLongPress(file.id),
-        () => {
+    // Tap & Long Press Logic
+    const timerRef = useRef(null);
+    const isLongPress = useRef(false);
+
+    function handleTapStart() {
+        isLongPress.current = false;
+        timerRef.current = setTimeout(() => {
+            isLongPress.current = true;
+            if (onLongPress) onLongPress(file.id);
+        }, 500);
+    }
+
+    function handleTapCancel() {
+        clearTimeout(timerRef.current);
+    }
+
+    function handleTap() {
+        clearTimeout(timerRef.current);
+        if (!isLongPress.current) {
             if (selectionMode) {
                 onSelect(file.id);
             } else {
                 console.log('Tapped file:', file.name);
             }
-        },
-        { shouldPreventDefault: true }
-    );
-
-    const [touchStart, setTouchStart] = React.useState(null);
-    const [touchEnd, setTouchEnd] = React.useState(null);
-    const [isSwiping, setIsSwiping] = React.useState(false);
-    const [offset, setOffset] = React.useState(0);
-    const [isDeleting, setIsDeleting] = React.useState(false);
-
-    const minSwipeDistance = 50;
-
-    const onTouchStart = (e) => {
-        setTouchEnd(null);
-        setTouchStart(e.targetTouches[0].clientX);
-        setIsSwiping(true);
-    };
-
-    const onTouchMove = (e) => {
-        setTouchEnd(e.targetTouches[0].clientX);
-        if (touchStart) {
-            const currentOffset = e.targetTouches[0].clientX - touchStart;
-            if (currentOffset < 0) { // Only allow left swipe
-                setOffset(currentOffset);
-            }
         }
-    };
+    }
 
-    const onTouchEnd = () => {
-        if (!touchStart || !touchEnd) return;
+    const bgLeftWidth = useTransform(x, (value) => Math.max(0, value));
+    const bgRightWidth = useTransform(x, (value) => Math.max(0, -value));
 
-        const distance = touchStart - touchEnd;
-        const isLeftSwipe = distance > minSwipeDistance;
+    function handleDragStart() {
+        clearTimeout(timerRef.current);
+    }
 
-        if (isLeftSwipe && distance > 100 && onDelete) {
+    const handleDragEnd = async (event, info) => {
+        if (!cardRef.current) return;
+        const width = cardRef.current.offsetWidth;
+        const offset = info.offset.x;
+        const threshold = width * 0.4;
+
+        if (Math.abs(offset) > threshold && onDelete) {
+            // Trigger Delete
             setIsDeleting(true);
-            // Wait for animation
-            setTimeout(() => {
-                onDelete(file.id);
-            }, 200);
-        } else {
-            setOffset(0);
-        }
-
-        setTouchStart(null);
-        setTouchEnd(null);
-        setIsSwiping(false);
-    };
-
-    // Mouse Event Wrappers
-    const onMouseDown = (e) => {
-        longPressProps.onMouseDown(e);
-        setTouchEnd(null);
-        setTouchStart(e.clientX);
-        setIsSwiping(true);
-    };
-
-    const onMouseMove = (e) => {
-        if (!isSwiping || !touchStart) return;
-        setTouchEnd(e.clientX);
-        const currentOffset = e.clientX - touchStart;
-        if (currentOffset < 0) { // Only allow left swipe
-            setOffset(currentOffset);
-            // Cancel long press if drag starts (threshold 5px)
-            if (Math.abs(currentOffset) > 5) {
-                longPressProps.onMouseLeave(e);
-            }
+            const direction = offset > 0 ? 1 : -1;
+            // Animate off screen
+            await controls.start({ x: direction * (width + 100), opacity: 0 });
+            onDelete(file.id);
+        } else{
+            controls.start({ x: 0, opacity: 1 });
         }
     };
 
-    const onMouseUp = (e) => {
-        longPressProps.onMouseUp(e);
-        onTouchEnd();
-    };
-
-    const onMouseLeave = (e) => {
-        longPressProps.onMouseLeave(e);
-        if (isSwiping) onTouchEnd();
-    };
-
-
-    if (isDeleting) return null;
+    if (isDeleting && !onDelete) return null; 
 
     return (
-        <div className="relative overflow-hidden rounded-lg">
-            {/* Background Layer (Delete) */}
-            <div className="absolute inset-0 bg-red-500 flex items-center justify-end px-6 rounded-[12px]">
+        <div className="relative rounded-lg w-full h-[88px]">
+    
+            <motion.div
+                className="absolute inset-y-2 left-0 bg-red-600 flex items-center justify-center z-0 rounded-full overflow-hidden"
+                style={{ width: bgLeftWidth }}
+            >
                 <Icon name="delete" size={24} className="text-white" />
-            </div>
+            </motion.div>
 
-            {/* Foreground Layer (Card) */}
-            <div
-                {...longPressProps}
-                // Override mouse events with our composition
-                onMouseDown={onMouseDown}
-                onMouseMove={onMouseMove}
-                onMouseUp={onMouseUp}
-                onMouseLeave={onMouseLeave}
+            <motion.div
+                className="absolute inset-y-2 right-0 bg-red-600 flex items-center justify-center z-0 rounded-full overflow-hidden"
+                style={{ width: bgRightWidth }}
+            >
+                <Icon name="delete" size={24} className="text-white" />
+            </motion.div>
 
-                onTouchStart={onTouchStart}
-                onTouchMove={onTouchMove}
-                onTouchEnd={onTouchEnd}
-                style={{ transform: `translateX(${offset}px)`, transition: isSwiping ? 'none' : 'transform 0.2s ease-out' }}
+            <motion.div
+                ref={cardRef}
+                layout // Smooth layout transitions when content changes (checkmark appears)
+                drag="x"
+                dragConstraints={{ left: 0, right: 0 }}
+                dragElastic={0.7} // Flexible drag for smoother feel
+                onDragStart={handleDragStart} // Cancel tap/long-press on drag
+                onDragEnd={handleDragEnd}
+                onTapStart={handleTapStart}
+                onTapCancel={handleTapCancel}
+                onTap={handleTap}
+                animate={controls}
+                style={{ x }}
+                whileTap={{ scale: 0.98 }} // Press animation
                 className={`
-                    relative flex items-center p-4 gap-4 rounded-lg transition-colors duration-200 select-none 
-                    ${selected ? 'bg-secondary-container ' : 'bg-surface-bright border border-surface-bright'}
+                    relative z-10 flex items-center p-4 gap-4 h-full w-full rounded-lg transition-colors duration-200 select-none 
+                    ${selected ? 'bg-secondary-container' : 'bg-surface-bright border border-surface-bright'}
+                    touch-pan-y
                 `}
             >
-                {/* Selection Indicator (Only when selected) */}
+
                 {selected && (
-                    <div className="flex-shrink-0">
+                    <motion.div
+                        initial={{ scale: 0, opacity: 0, width: 0 }}
+                        animate={{ scale: 1, opacity: 1, width: 'auto' }}
+                        exit={{ scale: 0, opacity: 0, width: 0 }}
+                        className="flex-shrink-0"
+                    >
                         <div className="w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center">
                             <Icon name="check" size={24} />
                         </div>
-                    </div>
+                    </motion.div>
                 )}
 
-                {/* Content */}
                 <div className="flex-1 min-w-0 flex flex-col gap-2">
-                    {/* File Name */}
+        
                     <h3 className="font-material-titlesmall text-on-surface truncate font-medium">
                         {file.name}
                     </h3>
 
-                    {/* Config Icons Row */}
                     <div className="flex items-center gap-3 text-on-surface-variant">
                         {/* Color/B&W */}
                         <div
@@ -165,7 +147,7 @@ const ItemCard = ({
                             className={`flex items-center transition-colors ${file.config.doubleSide !== 'off' ? 'text-on-surface' : 'text-surface-container'}`}
                             title={`Double Side: ${file.config.doubleSide}`}
                         >
-                            <Icon name="description" size={20} />
+                            <Icon name="swap_horiz" size={20} />
                         </div>
 
                         {/* Pages */}
@@ -173,15 +155,15 @@ const ItemCard = ({
                             className={`flex items-center transition-colors ${(file.config.pages && file.config.pages !== 'all') ? 'text-on-surface' : 'text-surface-container'}`}
                             title={`Pages: ${file.config.pages || 'All'}`}
                         >
-                            <Icon name="subject" size={20} />
+                            <Icon name="segment" size={20} />
                         </div>
 
                         {/* Orientation */}
                         <div
-                            className={`flex items-center transition-colors ${file.config.orientation !== 'portrait' ? 'text-on-surface' : 'text-surface-container'}`}
+                            className={`flex items-center transition-colors text-on-surface`}
                             title={`Orientation: ${file.config.orientation}`}
                         >
-                            <Icon name={file.config.orientation === 'landscape' ? "crop_landscape" : "crop_portrait"} size={20} />
+                            <Icon name={file.config.orientation === 'landscape' ? "fit_page_width" : "fit_page_height"} size={20} />
                         </div>
 
                         {/* Copies */}
@@ -193,15 +175,19 @@ const ItemCard = ({
 
                 {/* Edit Button */}
                 <button
+                    onPointerDown={(e) => {
+                        // Prevent drag from starting on the button
+                        e.stopPropagation();
+                    }}
                     onClick={(e) => {
                         e.stopPropagation();
                         onEdit(file.id);
                     }}
-                    className="p-2 text-on-surface-variant hover:bg-surface-container-highest rounded-full"
+                    className="p-2 text-on-surface-variant hover:bg-surface-container-highest rounded-full z-20 cursor-pointer"
                 >
                     <Icon name="edit" size={24} />
                 </button>
-            </div>
+            </motion.div>
         </div>
     );
 };

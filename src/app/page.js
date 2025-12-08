@@ -155,8 +155,8 @@ export default function Home() {
               <div className="flex justify-between items-center mb-2">
                 <h2 className="font-material-titlemedium text-on-surface">My Files</h2>
               </div>
-              <div className="h-full rounded-3xl overflow-x-hidden ">
-                <div className="flex flex-col gap-1 flex-1 overflow-y">
+              <div className=" overflow-x-hidden ">
+                <div className="flex rounded-3xl overflow-hidden flex-col gap-1 flex-1 overflow-y">
                   {files.map(file => (
                     <ItemCard
                       key={file.id}
