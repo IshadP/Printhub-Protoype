@@ -8,6 +8,7 @@ import QuickPrintCard from "./components/QuickPrintCard";
 import ItemCard from "./components/ItemCard";
 import BottomSheet from "./components/BottomSheet";
 import ActionButtons from "./components/ActionButtons";
+import PhoneFrame from "./components/PhoneFrame";
 import { useStorage } from "./context/StorageContext";
 
 export default function Home() {
@@ -31,7 +32,7 @@ export default function Home() {
       id: `quick-${Date.now()}`,
       name: type === 'admission' ? 'Admission Form.pdf' : 'Admit Card Form.pdf',
       type: 'application/pdf',
-      size: 1024 * 1024, // 1MB dummy size
+      size: 1024 * 1024,
       pages: 2,
       date: new Date().toISOString(),
       config: {
@@ -44,8 +45,6 @@ export default function Home() {
     };
     addFiles([newFile]);
   };
-
-
 
   const handlePrintSelected = () => {
     router.push('/scan');
@@ -61,23 +60,68 @@ export default function Home() {
 
   const editingFile = files.find(f => f.id === editingFileId);
 
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-surface-dim">
-      <div className="w-full h-full min-h-screen md:min-h-0 md:w-auto md:aspect-270/600 md:h-[90vh] md:border-2 md:rounded-3xl overflow-hidden relative flex flex-col justify-start top-0 bg-primary-container shadow-none md:shadow-2xl">
-        <TopBar
-          title={isSelectionMode ? `${cart.length} Selected` : "Printhub"}
-          showBackButton={isSelectionMode}
-          onBack={exitSelectionMode}
-        />
+  const appContent = (
+    <>
+      <TopBar
+        title={isSelectionMode ? `${cart.length} Selected` : "Printhub"}
+        showBackButton={isSelectionMode}
+        onBack={exitSelectionMode}
+      />
 
-        <div className="flex-1 overflow-y-auto px-4 flex flex-col gap-4">
-          {files.length === 0 ? (
-            <div className="flex flex-col gap-6 mt-4 h-full">
+      <div className="flex-1 overflow-y-auto px-4 flex flex-col gap-4">
+        {files.length === 0 ? (
+          <div className="flex flex-col gap-6 mt-4 h-full">
+            <div className="flex flex-col gap-4">
+              <h2 className="font-material-titlemedium text-on-surface">Quick Print</h2>
+              <div className="grid grid-rows-1 grid-flow-col gap-2 overflow-x-auto pb-4">
+                <div className="flex gap-1 h-full flex-col border-outline rounded-3xl overflow-hidden w-88">
+                  <div className="w-full">
+                    <QuickPrintCard
+                      title="Admission Form"
+                      onClick={() => handleQuickPrint('admission')}
+                    />
+                  </div>
+                  <div className="w-full">
+                    <QuickPrintCard
+                      title="Admit Card Form"
+                      onClick={() => handleQuickPrint('admit')}
+                    />
+                  </div>
+                </div>
+                <div className="flex gap-1 h-full flex-col border-outline rounded-3xl overflow-hidden w-88">
+                  <div className="w-full">
+                    <QuickPrintCard
+                      title="Exam Schedule"
+                      onClick={() => handleQuickPrint('exam')}
+                    />
+                  </div>
+                  <div className="w-full">
+                    <QuickPrintCard
+                      title="Result Sheet"
+                      onClick={() => handleQuickPrint('result')}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="flex justify-between items-center mb-2">
+              <h2 className="font-material-titlemedium text-on-surface">My Files</h2>
+            </div>
+            <div className="flex flex-col gap-1 overflow-hidden h-full justify-center items-center">
+              <p className="font-material-titlemedium text-primary text-center">
+                Tap the &quot;+ Add Files&quot; button to get started.
+                <br />All your documents will appear here
+              </p>
+            </div>
+          </div>
+        ) : (
+          <>
+            <div className="flex flex-col gap-6 mt-4">
               <div className="flex flex-col gap-4">
                 <h2 className="font-material-titlemedium text-on-surface">Quick Print</h2>
                 <div className="grid grid-rows-1 grid-flow-col gap-2 overflow-x-auto pb-4">
-                  <div className="flex gap-1 h-full flex-col border-outline rounded-3xl overflow-hidden w-[22rem]">
-                    <div className="w-full ">
+                  <div className="flex gap-1 h-full flex-col border-outline rounded-3xl overflow-hidden w-88">
+                    <div className="w-full">
                       <QuickPrintCard
                         title="Admission Form"
                         onClick={() => handleQuickPrint('admission')}
@@ -90,8 +134,7 @@ export default function Home() {
                       />
                     </div>
                   </div>
-                  {/* Add more items here to test bleeding */}
-                  <div className="flex gap-1 h-full flex-col border-outline rounded-3xl overflow-hidden w-[22rem]">
+                  <div className="flex gap-1 h-full flex-col border-outline rounded-3xl overflow-hidden w-88">
                     <div className="w-full">
                       <QuickPrintCard
                         title="Exam Schedule"
@@ -107,92 +150,62 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              <div className="flex justify-between items-center mb-2">
-                <h2 className="font-material-titlemedium text-on-surface">My Files</h2>
-              </div>
-              <div className="flex flex-col gap-1 overflow-hidden h-[100%] justify-center items-center">
-                <p className="font-material-titlemedium text-primary text-center"> Tap the "+ Add Files" button to get started. <br />All your documents will appear here</p>
+            </div>
+            <div className="flex justify-between items-center mb-2">
+              <h2 className="font-material-titlemedium text-on-surface">My Files</h2>
+            </div>
+            <div className="overflow-x-hidden">
+              <div className="flex rounded-3xl overflow-hidden flex-col gap-1 flex-1 overflow-y">
+                {files.map(file => (
+                  <ItemCard
+                    key={file.id}
+                    file={file}
+                    selectionMode={isSelectionMode}
+                    selected={cart.includes(file.id)}
+                    onSelect={toggleSelection}
+                    onLongPress={enterSelectionMode}
+                    onEdit={handleEdit}
+                    onDelete={removeFile}
+                  />
+                ))}
               </div>
             </div>
-          ) : (
-            <>
-              <div className="flex flex-col gap-6 mt-4">
-                <div className="flex flex-col gap-4">
-                  <h2 className="font-material-titlemedium text-on-surface">Quick Print</h2>
-                  <div className="grid grid-rows-1 grid-flow-col gap-2 overflow-x-auto pb-4">
-                    <div className="flex gap-1 h-full flex-col border-outline rounded-3xl overflow-hidden w-[22rem]">
-                      <div className="w-full ">
-                        <QuickPrintCard
-                          title="Admission Form"
-                          onClick={() => handleQuickPrint('admission')}
-                        />
-                      </div>
-                      <div className="w-full">
-                        <QuickPrintCard
-                          title="Admit Card Form"
-                          onClick={() => handleQuickPrint('admit')}
-                        />
-                      </div>
-                    </div>
-                    {/* Add more items here to test bleeding */}
-                    <div className="flex gap-1 h-full flex-col border-outline rounded-3xl overflow-hidden w-[22rem] ">
-                      <div className="w-full">
-                        <QuickPrintCard
-                          title="Exam Schedule"
-                          onClick={() => handleQuickPrint('exam')}
-                        />
-                      </div>
-                      <div className="w-full">
-                        <QuickPrintCard
-                          title="Result Sheet"
-                          onClick={() => handleQuickPrint('result')}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="flex justify-between items-center mb-2">
-                <h2 className="font-material-titlemedium text-on-surface">My Files</h2>
-              </div>
-              <div className=" overflow-x-hidden ">
-                <div className="flex rounded-3xl overflow-hidden flex-col gap-1 flex-1 overflow-y">
-                  {files.map(file => (
-                    <ItemCard
-                      key={file.id}
-                      file={file}
-                      selectionMode={isSelectionMode}
-                      selected={cart.includes(file.id)}
-                      onSelect={toggleSelection}
-                      onLongPress={enterSelectionMode}
-                      onEdit={handleEdit}
-                      onDelete={removeFile}
-                    />
-                  ))}
-                </div>
-              </div>
-            </>
-          )}
-        </div>
+          </>
+        )}
+      </div>
 
-        {/* Floating Action Buttons */}
-
-
-        <BottomSheet
-          isOpen={!!editingFileId}
-          onClose={() => setEditingFileId(null)}
-          file={editingFile}
-          onSave={handleSaveConfig}
+      <BottomSheet
+        isOpen={!!editingFileId}
+        onClose={() => setEditingFileId(null)}
+        file={editingFile}
+        onSave={handleSaveConfig}
+      />
+      <div className="flex justify-center pointer-events-none py-4 w-full">
+        <ActionButtons
+          addHref="/upload"
+          onPrint={handlePrintSelected}
+          selectedCount={cart.length}
+          printDisabled={files.length === 0}
         />
-        <div className="flex justify-center pointer-events-none py-4 w-full">
-          <ActionButtons
-            addHref="/upload"
-            onPrint={handlePrintSelected}
-            selectedCount={cart.length}
-            printDisabled={files.length === 0}
-          />
-        </div>
-        <Navbar />
+      </div>
+      <Navbar />
+    </>
+  );
+
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-surface-dim">
+      {/* Mobile: full-screen layout */}
+      <div className="md:hidden w-full h-full min-h-screen overflow-hidden relative flex flex-col justify-start top-0 bg-primary-container">
+        {appContent}
+      </div>
+
+      {/* Desktop: phone frame wrapper */}
+      <div className="hidden md:block">
+        <PhoneFrame>
+          <div className="w-full h-full overflow-hidden relative flex flex-col justify-start bg-primary-container">
+            {appContent}
+          </div>
+        </PhoneFrame>
       </div>
     </div>
   );
