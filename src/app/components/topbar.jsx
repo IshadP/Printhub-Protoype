@@ -1,14 +1,14 @@
 "use client";
 
-import React from 'react';
-import Icon from './Icon';
-
-
+import React from "react";
+import Icon from "./Icon";
 
 const StatusBar = () => (
   // Use surface-container-low for status bar background
-  <div className="flex pt-4 pb-2
-   px-4 justify-between items-center w-full bg-color-surface-container-low text-on-surface-variant font-material-themelabelmedium h-8">
+  <div
+    className="hidden md:flex pt-4 pb-2
+   px-4 justify-between items-center w-full bg-color-surface-container-low text-on-surface-variant font-material-themelabelmedium h-8"
+  >
     <span className="font-material-themelabellarge">9:30</span>
 
     <div className="flex items-center gap-1.5">
@@ -18,23 +18,26 @@ const StatusBar = () => (
   </div>
 );
 
-import { useStorage } from '../context/StorageContext';
+import { useStorage } from "../context/StorageContext";
 
 const TopBar = ({
   title,
   // isDarkMode, // Deprecated
   // onToggleTheme, // Deprecated
   onBack,
-  showBackButton
+  showBackButton,
 }) => {
   const { theme, toggleTheme } = useStorage();
-  const isDarkMode = theme === 'dark' || (theme === 'system' && typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  const isDarkMode =
+    theme === "dark" ||
+    (theme === "system" &&
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches);
 
   return (
     <header className="sticky top-0 z-20 w-full bg-primary-container transition-colors duration-300">
       <StatusBar />
       <div className="flex h-16 items-center px-4 justify-between">
-
         {/* Left Side: Back Button or App Title */}
         <div className="flex items-center gap-2">
           {showBackButton ? (
@@ -58,7 +61,6 @@ const TopBar = ({
               {title}
             </span>
           )}
-
         </div>
 
         {/* Right Side: Actions */}
@@ -70,7 +72,7 @@ const TopBar = ({
             aria-label="Toggle Theme"
           >
             <Icon
-              name={isDarkMode ? 'dark_mode' : 'light_mode'}
+              name={isDarkMode ? "dark_mode" : "light_mode"}
               size={24}
               filled={isDarkMode}
             />
